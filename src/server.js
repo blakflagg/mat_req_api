@@ -6,7 +6,6 @@ import https from 'https'
 import auth from './lib/auth'
 import endpoints from './endpoints'
 import makeCallback from './helpers/express-callback'
-import generateJWT from './helpers/jwtTokenGenerator';
 
 
 const app = express()
@@ -30,7 +29,6 @@ app.use((error, request, response, next) => {
 app.get('/', (req, res) => res.send('Hello World'))
 app.get('/users', auth.optional, makeCallback(endpoints.handleUsersRequest))
 app.post('/login', auth.optional, makeCallback(endpoints.handleUsersRequest))
-// app.get('/forgotPassword', auth.optional, makeCallback(endpoints.handleUsersRequest))
 app.get('/partrequests', auth.required, makeCallback(endpoints.handlePartRequests))
 app.post('/partrequest', auth.required, makeCallback(endpoints.handlePartRequests))
 app.patch('/partrequest/:partRequestId', auth.required, makeCallback(endpoints.handlePartRequests))
@@ -40,11 +38,6 @@ app.delete('/partrequestitem/:partRequestItemId', auth.required, makeCallback(en
 app.get('/inventoryitems', auth.required, makeCallback(endpoints.handleInventoryRequests))
 app.post('/resetpassword', auth.required, makeCallback(endpoints.handleUsersRequest))
 
-function getAdminToken() {
-  //function MUST BE REMOVED BEFORE PRODUCTION
-  console.log(generateJWT(61, 1));
-
-}
 server.init = () => {
   http.createServer(app).listen(PORT_HTTP)
   https.createServer(app).listen(PORT_HTTPS)
