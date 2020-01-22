@@ -27,7 +27,10 @@ export default function makePartRequestDAL({ database }) {
                 ],
                 where: {
                     requested_for: userId
-                }
+                },
+                order: [
+                    ['id', 'DESC']
+                ]
             })
             if (!results) {
                 throw new NoRecordError("No Records Found")
@@ -37,7 +40,7 @@ export default function makePartRequestDAL({ database }) {
                 return documentToPartRequest(partRequest.dataValues)
             });
         } catch (err) {
-            
+
             throw err;
         }
     }

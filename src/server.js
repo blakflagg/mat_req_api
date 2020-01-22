@@ -11,8 +11,8 @@ import makeCallback from './helpers/express-callback'
 const app = express()
 const server = {}
 
-const PORT_HTTP = 3000
-const PORT_HTTPS = 3001
+const PORT_HTTP = 8000
+const PORT_HTTPS = 8001
 
 
 app.use(Cors());
@@ -41,7 +41,7 @@ app.post('/resetpassword', auth.required, makeCallback(endpoints.handleUsersRequ
 server.init = () => {
   http.createServer(app).listen(PORT_HTTP)
   https.createServer(app).listen(PORT_HTTPS)
-  getAdminToken()
+  // getAdminToken()
 }
 
 
