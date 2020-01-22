@@ -20,7 +20,10 @@ export default function makeInventoryItemsDAL({ database }) {
                 where: {
                     ...WHERE
                 },
-                limit: 1000
+                order: [
+                    ['part_no']
+                ],
+                limit: 3000
             })
             if (!results) throw new NoRecordError;
 
