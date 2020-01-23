@@ -13,11 +13,11 @@ class PartRequestItem extends Sequelize.Model {
                 type: DataTypes.INTEGER,
                 field: 'Part_Request_Link'
             },
-            inventory_id: {
+            rec_id: {
                 type: DataTypes.INTEGER,
                 field: 'Inventory_Link'
             },
-            item_description: {
+            item_desc: {
                 type: DataTypes.STRING,
                 field: 'Item_Desc'
             },
@@ -37,15 +37,15 @@ class PartRequestItem extends Sequelize.Model {
                 type: DataTypes.STRING,
                 field: 'Status'
             }
-            }, {
-                tableName: 'tblPartRequestItems',
-                modelName: 'PartRequestItem',
-                timestamps: false,
-                createdAt: false,
-                updatedAt: false,
-                freezeTableName: true,
-                sequelize
-            })
+        }, {
+            tableName: 'tblPartRequestItems',
+            modelName: 'PartRequestItem',
+            timestamps: false,
+            createdAt: false,
+            updatedAt: false,
+            freezeTableName: true,
+            sequelize
+        })
     }
 }
 export default PartRequestItem;

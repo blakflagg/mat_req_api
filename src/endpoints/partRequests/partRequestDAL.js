@@ -22,7 +22,15 @@ export default function makePartRequestDAL({ database }) {
                     {
                         model: db.PartRequestItem,
                         as: 'RequestItems',
-                        required: false
+                        required: false,
+                        include: [
+                            {
+                                model: db.InventoryItems,
+                                as: 'InventoryInfo',
+                                required: false,
+                                attributes: ['part_no']
+                            }
+                        ]
                     }
                 ],
                 where: {
@@ -58,8 +66,8 @@ export default function makePartRequestDAL({ database }) {
                 const runBlock = partRequestItems.map(async item => {
                     const partRequestItem = {
                         part_request_link: newPartRequest.id,
-                        inventory_id: item.inventory_id,
-                        item_description: item.item_description,
+                        rec_id: item.rec_id,
+                        item_desc: item.item_desc,
                         qty: item.qty,
                         status: 'NEW'
                     }
