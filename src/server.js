@@ -34,6 +34,7 @@ app.post('/partrequest', auth.required, makeCallback(endpoints.handlePartRequest
 app.patch('/partrequest/:partRequestId', auth.required, makeCallback(endpoints.handlePartRequests))
 app.delete('/partrequest/:partRequestId', auth.required, makeCallback(endpoints.handlePartRequests))
 app.patch('/partrequestitem/:partRequestItemId', auth.required, makeCallback(endpoints.handlePartRequestItems))
+app.patch('/partrequestitems', auth.required, makeCallback(endpoints.handlePartRequestItems))
 app.delete('/partrequestitem/:partRequestItemId', auth.required, makeCallback(endpoints.handlePartRequestItems))
 app.get('/inventoryitems', auth.required, makeCallback(endpoints.handleInventoryRequests))
 app.post('/resetpassword', auth.required, makeCallback(endpoints.handleUsersRequest))

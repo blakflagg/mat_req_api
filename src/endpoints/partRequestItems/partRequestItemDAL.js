@@ -1,7 +1,7 @@
 import makePartRequestItem from './partRequestItem'
 import { NoRecordError, InvalidPropertyError } from '../../helpers/errors'
 
-export default function makePartRequestItemDAL({database}){
+export default function makePartRequestItemDAL({ database }) {
     return Object.freeze({
         findById,
         deleteById,
@@ -9,26 +9,26 @@ export default function makePartRequestItemDAL({database}){
         updateById
     })
 
-    async function findById({partRequestItemId}){
+    async function findById({ partRequestItemId }) {
         const db = await database
-        try{
+        try {
             const result = await db.PartRequestItem.findOne({
                 where: {
                     id: partRequestItemId
                 }
             })
 
-            if(!result){
+            if (!result) {
                 throw new NoRecordError("Record Not Found");
             }
 
-            return recordToPartRequestItem({...result});
-        }catch(err){
+            return recordToPartRequestItem({ ...result });
+        } catch (err) {
             throw err
         }
     }
 
-    async function deleteById({userId, partRequestItemId}){
+    async function deleteById({ userId, partRequestItemId }) {
 
         const db = await database;
         try {
@@ -49,16 +49,17 @@ export default function makePartRequestItemDAL({database}){
         }
     }
 
-    async function add(){
+    async function add(partRequestItem) {
+
 
     }
 
-    async function updateById({id}){
+    async function updateById({ id }) {
 
     }
 
-    function recordToPartRequestItem(result){
-        return makePartRequestItem({...result})
+    function recordToPartRequestItem(result) {
+        return makePartRequestItem({ ...result })
     }
 
 }

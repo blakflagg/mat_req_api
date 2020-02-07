@@ -5,6 +5,7 @@ import {
     NoRecordError
 } from '../../helpers/errors'
 import makeHttpError from '../../helpers/http-error'
+import makeHttpResult from '../../helpers/http-result'
 
 export default function makePartRequestItemEndpointHandler({ partRequestItemDAL }) {
     return async function handle(httpRequest) {
@@ -20,7 +21,42 @@ export default function makePartRequestItemEndpointHandler({ partRequestItemDAL 
                 })
         }
     }
+    async function updatePartRequestItems(httpRequest) {
+        const { payload: { id } } = httpRequest
+        let updateRequestItem
+        let result = null
 
+        for (let item of httpRequest.body) {
+
+            switch (item.op) {
+                case 'add':
+                    updatePartRequestItem = {
+                        part_request_link: item.part_request_link,
+                        rec_id: item.rec_id,
+                        item_desc: item.item_desc,
+                        qty: item.qty,
+                        status: 'NEW'
+                    }
+                    try {
+
+                        result = await partRequestItemDAL.add(updatePartRequestItem)
+                        if (result) {
+                            return makeHttpResult({ statusCode: 200, resultMessage: "Records Added" })
+                        }
+                    } catch (error) {
+                        return makeHttpError()
+                    }
+                    break;
+                case 'remove':
+                    console.log('remove' + items.request_item_id)
+                    break;
+                case 'update':
+                    console.log('update' + items.request_item_id)
+                    break;
+            }
+        }
+
+    }
     async function deletePartRequestItem(httpRequest) {
         const { payload: { id } } = httpRequest
         const { partRequestItemId } = httpRequest.params || {}
@@ -38,7 +74,7 @@ export default function makePartRequestItemEndpointHandler({ partRequestItemDAL 
             }
 
         } catch (err) {
-            if(err.name = "NoRecordError"){
+            if (err.name = "NoRecordError") {
                 return makeHttpError({
                     statusCode: 404,
                     errorMessage: 'No Record Found'
@@ -50,7 +86,8 @@ export default function makePartRequestItemEndpointHandler({ partRequestItemDAL 
 
     }
     function patchPathRouter(httpRequest) {
-        //TODO: create a patch functionality
+        return updatePartRequestItems(httpRequest)
+
     }
 
     function deletePathRouter(httpRequest) {
