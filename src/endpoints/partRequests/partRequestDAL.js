@@ -69,7 +69,8 @@ export default function makePartRequestDAL({ database }) {
                         rec_id: item.rec_id,
                         item_desc: item.item_desc,
                         qty: item.qty,
-                        status: 'NEW'
+                        status: 'New',
+                        item_type: 3
                     }
                     return new Promise(async (resolve, reject) => {
                         try {

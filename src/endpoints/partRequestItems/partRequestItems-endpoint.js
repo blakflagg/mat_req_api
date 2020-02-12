@@ -23,39 +23,53 @@ export default function makePartRequestItemEndpointHandler({ partRequestItemDAL 
     }
     async function updatePartRequestItems(httpRequest) {
         const { payload: { id } } = httpRequest
-        let updateRequestItem
-        let result = null
+        let updatePartRequestItem, partRequestItemId
+        let result = []
 
-        for (let item of httpRequest.body) {
-
-            switch (item.op) {
-                case 'add':
-                    updatePartRequestItem = {
-                        part_request_link: item.part_request_link,
-                        rec_id: item.rec_id,
-                        item_desc: item.item_desc,
-                        qty: item.qty,
-                        status: 'NEW'
-                    }
-                    try {
-
-                        result = await partRequestItemDAL.add(updatePartRequestItem)
-                        if (result) {
-                            return makeHttpResult({ statusCode: 200, resultMessage: "Records Added" })
+        try {
+            for (let item of httpRequest.body) {
+                console.log(item)
+                switch (item.op) {
+                    case 'add':
+                        updatePartRequestItem = {
+                            ...item,
+                            status: 'New',
+                            item_type: 3
                         }
-                    } catch (error) {
-                        return makeHttpError()
+                        try {
+                            result.push(partRequestItemDAL.add(updatePartRequestItem))
+                        } catch (e) {
+                            throw e;
+                        }
+                        break;
+                    case 'remove':
+                        try {
+                            result.push(partRequestItemDAL.deleteById(item))
+                        } catch (e) {
+                            throw e;
+                        }
+                        break;
+                    case 'update':
+                        try {
+                            result.push(partRequestItemDAL.updateById(item))
+                        } catch (e) {
+                            throw e;
+                        }
+                        break;
+                    default: {
+                        throw new Error('Unknown OP Code');
                     }
-                    break;
-                case 'remove':
-                    console.log('remove' + items.request_item_id)
-                    break;
-                case 'update':
-                    console.log('update' + items.request_item_id)
-                    break;
+                }
             }
-        }
+            await Promise.all(result);
+            return makeHttpResult({ statusCode: 200, resultMessage: "Success" })
 
+        } catch (e) {
+            return makeHttpError({
+                statusCode: 500,
+                errorMessage: e.message
+            })
+        }
     }
     async function deletePartRequestItem(httpRequest) {
         const { payload: { id } } = httpRequest

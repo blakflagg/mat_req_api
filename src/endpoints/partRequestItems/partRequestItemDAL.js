@@ -1,5 +1,6 @@
 import makePartRequestItem from './partRequestItem'
 import { NoRecordError, InvalidPropertyError } from '../../helpers/errors'
+import { request } from 'express'
 
 export default function makePartRequestItemDAL({ database }) {
     return Object.freeze({
@@ -28,13 +29,12 @@ export default function makePartRequestItemDAL({ database }) {
         }
     }
 
-    async function deleteById({ userId, partRequestItemId }) {
-
+    async function deleteById({ id }) {
         const db = await database;
         try {
             const result = await db.PartRequestItem.destroy({
                 where: {
-                    id: partRequestItemId
+                    id: id
                 }
             })
 
@@ -44,18 +44,37 @@ export default function makePartRequestItemDAL({ database }) {
 
             return result
         } catch (err) {
-            console.log('inside DAL catch', err)
             throw err
         }
     }
 
-    async function add(partRequestItem) {
-
-
+    async function add(item) {
+        const db = await database;
+        try {
+            return await db.PartRequestItem.create({ ...item })
+        } catch (err) {
+            throw err
+        }
     }
 
-    async function updateById({ id }) {
-
+    async function updateById({ id, qty }) {
+        const db = await database;
+        try {
+            const result = await db.PartRequestItem.update({
+                qty: qty
+            },
+                {
+                    where: {
+                        id: id
+                    }
+                })
+            if (!result || result === 0) {
+                throw new NoRecordError("No Records Found")
+            }
+            return result
+        } catch (e) {
+            throw e
+        }
     }
 
     function recordToPartRequestItem(result) {
